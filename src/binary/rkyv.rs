@@ -1,10 +1,11 @@
 use crate::{Decoder, Encoder};
-use rkyv::de::deserializers::SharedDeserializeMap;
-use rkyv::ser::serializers::AllocSerializer;
-use rkyv::validation::validators::DefaultValidator;
-use rkyv::{Archive, CheckBytes, Deserialize, Fallible, Serialize};
 use std::error::Error;
 use std::sync::Arc;
+use rkyv::rancor::{Fallible, Strategy};
+use rkyv::ser::allocator::ArenaHandle;
+use rkyv::{bytecheck, rancor, Archive, Deserialize, Serialize};
+use rkyv::api::high::{HighSerializer, HighValidator};
+use rkyv::de::Pool;
 
 /// A codec that relies on `rkyv` to encode data in the msgpack format.
 ///
@@ -13,13 +14,13 @@ pub struct RkyvCodec;
 
 impl<T> Encoder<T> for RkyvCodec
 where
-    T: Serialize<AllocSerializer<1024>>,
+    T: for<'a> Serialize<HighSerializer<Vec<u8>, ArenaHandle<'a>, rancor::Error>>
 {
-    type Error = <AllocSerializer<1024> as Fallible>::Error;
+    type Error = rancor::Error;
     type Encoded = Vec<u8>;
 
     fn encode(val: &T) -> Result<Self::Encoded, Self::Error> {
-        Ok(rkyv::to_bytes::<T, 1024>(val)?.to_vec())
+        Ok(rkyv::api::high::to_bytes_in(val, Vec::new())?)
     }
 }
 
@@ -27,13 +28,14 @@ impl<T> Decoder<T> for RkyvCodec
 where
     T: Archive,
     for<'a> T::Archived:
-        'a + CheckBytes<DefaultValidator<'a>> + Deserialize<T, SharedDeserializeMap>,
+        'a + bytecheck::CheckBytes<HighValidator<'a, rancor::Error>> + Deserialize<T, Strategy<Pool, rancor::Error>>
+
 {
     type Error = Arc<dyn Error>;
     type Encoded = [u8];
 
     fn decode(val: &Self::Encoded) -> Result<T, Self::Error> {
-        rkyv::from_bytes::<T>(val).map_err(|e| Arc::new(e) as Arc<dyn Error>)
+        rkyv::from_bytes::<T, rancor::Error>(val).map_err(|e| Arc::new(e) as Arc<dyn Error>)
     }
 }
 
@@ -44,7 +46,6 @@ mod tests {
     #[test]
     fn test_rkyv_codec() {
         #[derive(Clone, Debug, PartialEq, rkyv::Archive, rkyv::Serialize, rkyv::Deserialize)]
-        #[archive(check_bytes)]
         struct Test {
             s: String,
             i: i32,
