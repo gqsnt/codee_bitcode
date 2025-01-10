@@ -1,11 +1,11 @@
 use crate::{Decoder, Encoder};
-use std::error::Error;
-use std::sync::Arc;
+use rkyv::api::high::{HighSerializer, HighValidator};
+use rkyv::de::Pool;
 use rkyv::rancor::{Fallible, Strategy};
 use rkyv::ser::allocator::ArenaHandle;
 use rkyv::{bytecheck, rancor, Archive, Deserialize, Serialize};
-use rkyv::api::high::{HighSerializer, HighValidator};
-use rkyv::de::Pool;
+use std::error::Error;
+use std::sync::Arc;
 
 /// A codec that relies on `rkyv` to encode data in the msgpack format.
 ///
@@ -14,7 +14,7 @@ pub struct RkyvCodec;
 
 impl<T> Encoder<T> for RkyvCodec
 where
-    T: for<'a> Serialize<HighSerializer<Vec<u8>, ArenaHandle<'a>, rancor::Error>>
+    T: for<'a> Serialize<HighSerializer<Vec<u8>, ArenaHandle<'a>, rancor::Error>>,
 {
     type Error = rancor::Error;
     type Encoded = Vec<u8>;
@@ -27,9 +27,9 @@ where
 impl<T> Decoder<T> for RkyvCodec
 where
     T: Archive,
-    for<'a> T::Archived:
-        'a + bytecheck::CheckBytes<HighValidator<'a, rancor::Error>> + Deserialize<T, Strategy<Pool, rancor::Error>>
-
+    for<'a> T::Archived: 'a
+        + bytecheck::CheckBytes<HighValidator<'a, rancor::Error>>
+        + Deserialize<T, Strategy<Pool, rancor::Error>>,
 {
     type Error = Arc<dyn Error>;
     type Encoded = [u8];
