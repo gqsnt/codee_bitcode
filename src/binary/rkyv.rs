@@ -1,7 +1,7 @@
 use crate::{Decoder, Encoder};
 use rkyv::api::high::{HighSerializer, HighValidator};
 use rkyv::de::Pool;
-use rkyv::rancor::{Fallible, Strategy};
+use rkyv::rancor::Strategy;
 use rkyv::ser::allocator::ArenaHandle;
 use rkyv::{bytecheck, rancor, Archive, Deserialize, Serialize};
 use std::error::Error;
@@ -20,7 +20,7 @@ where
     type Encoded = Vec<u8>;
 
     fn encode(val: &T) -> Result<Self::Encoded, Self::Error> {
-        Ok(rkyv::api::high::to_bytes_in(val, Vec::new())?)
+        rkyv::api::high::to_bytes_in(val, Vec::new())
     }
 }
 
