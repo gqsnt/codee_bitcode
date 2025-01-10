@@ -1,6 +1,6 @@
 [package]
 name = "codee"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2021"
 authors = ["Marc-Stefan Cassola"]
 categories = ["encoding"]
@@ -12,18 +12,18 @@ readme = "README.md"
 repository = "https://github.com/Synphonyte/codee"
 
 [dependencies]
-base64 = { version = "0.21", optional = true }
+base64 = { version = "0.22", optional = true }
 bincode = { version = "1", optional = true }
 js-sys = { version = "0.3", optional = true }
 miniserde = { version = "0.1", optional = true }
-prost = { version = "0.12", optional = true }
-rkyv = { version = "0.7", optional = true, features = ["validation", "strict"] }
+prost = { version = "0.13", optional = true }
+rkyv = { version = "0.8.9", optional = true }
 rmp-serde = { version = "1.1", optional = true }
 serde = { version = "1", optional = true }
 serde_json = { version = "1", optional = true }
 serde-lite = { version = "0.5", optional = true }
 serde-wasm-bindgen = { version = "0.6", optional = true }
-thiserror = "1.0.61"
+thiserror = "2.0"
 wasm-bindgen = { version = "0.2", optional = true }
 
 [features]
@@ -38,8 +38,8 @@ json_serde_wasm = ["dep:serde", "dep:serde_json", "dep:js-sys", "dep:serde-wasm-
 [dev-dependencies]
 serde = { version = "1", features = ["derive"] }
 serde-lite = { version = "0.5", features = ["derive"] }
-leptos = "0.6"
-leptos-use = "0.12"
+leptos = "0.7"
+leptos-use = "0.15"
 
 [package.metadata.docs.rs]
 all-features = true
