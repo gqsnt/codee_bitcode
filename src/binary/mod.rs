@@ -1,3 +1,5 @@
+#[cfg(feature = "bincode")]
+mod bincode;
 #[cfg(feature = "bincode_serde")]
 mod bincode_serde;
 mod from_to_bytes;
@@ -8,6 +10,8 @@ mod prost;
 #[cfg(feature = "rkyv")]
 mod rkyv;
 
+#[cfg(feature = "bincode")]
+pub use bincode::*;
 #[cfg(feature = "bincode_serde")]
 pub use bincode_serde::*;
 #[allow(unused_imports)]

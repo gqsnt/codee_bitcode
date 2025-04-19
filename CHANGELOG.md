@@ -3,6 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.1] - 2025-04-19
+
+### New Codecs
+
+- Add a `bincode` feature to encode with `bincode v2` without serde and native `bincode::Encode` and `bincode::Decode` derive macros (thanks to @zakstucke)
+
 ## [0.3.0] - 2025-01-09
 
 ### Breaking Changes
