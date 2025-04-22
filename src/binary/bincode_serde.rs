@@ -1,6 +1,7 @@
 use crate::{Decoder, Encoder};
+use bincode_v1 as bincode;
 
-/// A codec that relies on `bincode` adn `serde` to encode data in the bincode format.
+/// A codec that relies on `bincode` and `serde` to encode data in the bincode format.
 ///
 /// This is only available with the **`bincode_serde` feature** enabled.
 pub struct BincodeSerdeCodec;

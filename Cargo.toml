@@ -1,6 +1,6 @@
 [package]
 name = "codee"
-version = "0.3.0"
+version = "0.3.1"
 edition = "2021"
 authors = ["Marc-Stefan Cassola"]
 categories = ["encoding"]
@@ -13,7 +13,6 @@ repository = "https://github.com/Synphonyte/codee"
 
 [dependencies]
 base64 = { version = "0.22", optional = true }
-bincode = { version = "1", optional = true }
 js-sys = { version = "0.3", optional = true }
 miniserde = { version = "0.1", optional = true }
 prost = { version = "0.13", optional = true }
@@ -26,11 +25,18 @@ serde-wasm-bindgen = { version = "0.6", optional = true }
 thiserror = "2.0"
 wasm-bindgen = { version = "0.2", optional = true }
 
+# Optional bincode v1 for bincode_serde feature
+bincode_v1 = { package = "bincode", version = "1", optional = true }
+
+# Optional bincode v2 for bincode feature
+bincode = { package = "bincode", version = "2.0.1", optional = true }
+
 [features]
 prost = ["dep:prost"]
 json_serde = ["dep:serde_json", "dep:serde"]
 msgpack_serde = ["dep:rmp-serde", "dep:serde"]
-bincode_serde = ["dep:bincode", "dep:serde"]
+bincode = ["dep:bincode"]
+bincode_serde = ["dep:bincode_v1", "dep:serde"]
 serde_lite = ["dep:serde-lite"]
 json_serde_wasm = ["dep:serde", "dep:serde_json", "dep:js-sys", "dep:serde-wasm-bindgen", "dep:wasm-bindgen"]
 
