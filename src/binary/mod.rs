@@ -1,5 +1,7 @@
 #[cfg(feature = "bincode")]
 mod bincode;
+#[cfg(feature = "bitcode")]
+mod bitcode;
 #[cfg(feature = "bincode_serde")]
 mod bincode_serde;
 mod from_to_bytes;
@@ -12,6 +14,8 @@ mod rkyv;
 
 #[cfg(feature = "bincode")]
 pub use bincode::*;
+#[cfg(feature = "bitcode")]
+pub use bitcode::*;
 #[cfg(feature = "bincode_serde")]
 pub use bincode_serde::*;
 #[allow(unused_imports)]

@@ -30,6 +30,7 @@ bincode_v1 = { package = "bincode", version = "1", optional = true }
 
 # Optional bincode v2 for bincode feature
 bincode = { package = "bincode", version = "2.0.1", optional = true }
+bitcode = { version = "0.6.6", optional = true }
 
 [features]
 prost = ["dep:prost"]
@@ -39,7 +40,7 @@ bincode = ["dep:bincode"]
 bincode_serde = ["dep:bincode_v1", "dep:serde"]
 serde_lite = ["dep:serde-lite"]
 json_serde_wasm = ["dep:serde", "dep:serde_json", "dep:js-sys", "dep:serde-wasm-bindgen", "dep:wasm-bindgen"]
-
+bitcode= ["dep:bitcode"]
 
 [dev-dependencies]
 serde = { version = "1", features = ["derive"] }
